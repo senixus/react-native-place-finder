@@ -1,23 +1,70 @@
-import React, {useState} from 'react';
-import {Modal, Text, View, Image} from 'react-native';
+import React, {
+  ForwardRefRenderFunction,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import {
+  Modal,
+  Text,
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {useDispatch} from 'react-redux';
 
 // Components
 import AppInput from '../common/AppInput';
 import AppButton from '../common/AppButton';
+import AppText from '../common/AppText';
 
+// Assets
 import close from '../../assets/close-circle.png';
 
-const SearchModal = () => {
+// Actions
+import {searchQuery} from '../../redux/searchSlice';
+
+export interface IModalRef {
+  handleModal: () => void;
+}
+
+interface IProps {
+  setLocation: (value: string) => void;
+  setTerm: (value: string) => void;
+  location: string;
+  term: string;
+}
+
+const SearchModal: ForwardRefRenderFunction<IModalRef, IProps> = (
+  {setLocation, setTerm, location, term},
+  ref,
+) => {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const handleModal = () => setModalVisible(prevVisible => !prevVisible);
+
+  useImperativeHandle(ref, () => ({
+    handleModal,
+  }));
+
+  const search = () => {
+    dispatch(searchQuery({location, term}));
+    setModalVisible(false);
+  };
+
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(!modalVisible)}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(!modalVisible)}>
+      <KeyboardAvoidingView
+        style={styles.centeredView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <AppButton
@@ -26,20 +73,29 @@ const SearchModal = () => {
               <Image source={close} />
             </AppButton>
             <View style={{...styles.inputItem, marginTop: 100}}>
-              <AppInput placeholder="Pasta, Coffee, Beer etc..." />
+              <AppText text="Food, Drink etc..." style={styles.label} />
+              <AppInput
+                value={term}
+                setValue={(value: string) => setTerm(value)}
+                placeholder="Pasta, Coffee, Beer etc..."
+              />
             </View>
             <View style={styles.inputItem}>
-              <AppInput placeholder="New York" />
+              <AppText text="Location" style={styles.label} />
+              <AppInput
+                value={location}
+                setValue={(value: string) => setLocation(value)}
+                placeholder="New York"
+              />
             </View>
-            <AppButton
-              style={styles.button}
-              onPress={() => setModalVisible(!modalVisible)}>
+
+            <AppButton style={styles.button} onPress={search}>
               <Text style={styles.text}>Search</Text>
             </AppButton>
           </View>
         </View>
-      </Modal>
-    </View>
+      </KeyboardAvoidingView>
+    </Modal>
   );
 };
 
@@ -79,6 +135,11 @@ const styles = EStyleSheet.create({
     letterSpacing: 0.8,
     fontSize: '14rem',
   },
+  label: {
+    fontSize: '13rem',
+    marginBottom: 10,
+    fontWeight: '600',
+  },
 });
 
-export default SearchModal;
+export default forwardRef(SearchModal);
