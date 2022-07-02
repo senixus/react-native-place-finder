@@ -4,10 +4,6 @@ export interface ILocation {
   display_address: string[];
 }
 
-export interface IPhoto {
-  photos: string[];
-}
-
 export interface IHourItem {
   is_overnight: boolean;
   start: string;
@@ -24,6 +20,6 @@ export interface IHour {
 export interface IBusinessDetail extends ISearchItem {
   is_claimed: boolean;
   location: ILocation;
-  photos: IPhoto;
+  photos: string[];
   hours: IHour[];
 }
