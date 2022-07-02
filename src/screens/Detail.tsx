@@ -15,6 +15,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import ReviewCard from '../components/review/ReviewCard';
 import FullScreenImage, {IModalRef} from '../components/detail/Modal';
 import AppButton from '../components/common/AppButton';
+import DetailCard from '../components/detail/DetailCard';
+import Loading from '../components/common/Loading';
 
 // Interfaces
 import {IAppParams} from '../interfaces/app.interface';
@@ -31,7 +33,6 @@ import {IBusinessDetail} from '../interfaces/detail.interface';
 import defaultPhoto from '../assets/default-photo.png';
 import back from '../assets/left-arrow.png';
 import close from '../assets/close-circle.png';
-import DetailCard from '../components/detail/DetailCard';
 
 interface IProps {
   navigation: StackNavigationProp<IAppParams, 'Detail'>;
@@ -66,6 +67,8 @@ const Detail: FC<IProps> = ({navigation, route}) => {
     setImage(img);
     modalRef?.current?.handleModal();
   };
+
+  if (!businessDetail.id) return <Loading />;
 
   return (
     <>
