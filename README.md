@@ -22,8 +22,8 @@ After the creating your android map API key. You need to add to your manifest fi
 </application>
 
 ```
-If you want to use on IOS, you can follow steps here
-[IOS](https://github.com/react-native-maps/react-native-maps/blob/HEAD/docs/installation.md)
+If you want to use on IOS, you can follow [IOS](https://github.com/react-native-maps/react-native-maps/blob/HEAD/docs/installation.md) steps.
+
 
 After the finishing configuration steps you can run the app
 
