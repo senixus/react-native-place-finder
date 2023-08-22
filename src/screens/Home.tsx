@@ -1,9 +1,10 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, View, FlatList} from 'react-native';
+import {Image, View, FlatList, StatusBar} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // Components
 import AppText from '../components/common/AppText';
@@ -65,6 +66,7 @@ const Search: FC<IProps> = ({route}) => {
 
   return (
     <>
+      <StatusBar barStyle={'dark-content'} />
       <SearchModal
         ref={modalRef}
         location={location}
@@ -89,26 +91,28 @@ const Search: FC<IProps> = ({route}) => {
 
         <Map setMarkerItem={setMarkerItem} />
       </FullScreenModal>
-      <View style={styles.container}>
-        <View style={styles.filterHeader}>
-          <AppText text={`${location} - ${term}`} style={styles.searchText} />
+      <SafeAreaView edges={['top']} style={{flex: 1}}>
+        <View style={styles.container}>
+          <View style={styles.filterHeader}>
+            <AppText text={`${location} - ${term}`} style={styles.searchText} />
+            <AppButton
+              onPress={() => modalRef.current?.handleModal()}
+              style={styles.filterBtn}>
+              <Image source={filter} style={styles.filterIcon} />
+            </AppButton>
+          </View>
+          <FlatList
+            data={searchItems}
+            renderItem={renderItem}
+            keyExtractor={item => item?.id}
+          />
           <AppButton
-            onPress={() => modalRef.current?.handleModal()}
-            style={styles.filterBtn}>
-            <Image source={filter} style={styles.filterIcon} />
+            onPress={() => mapModalRef.current?.handleModal()}
+            style={styles.mapBtn}>
+            <AppText text="Show on Map" style={styles.mapText} />
           </AppButton>
         </View>
-        <FlatList
-          data={searchItems}
-          renderItem={renderItem}
-          keyExtractor={item => item?.id}
-        />
-        <AppButton
-          onPress={() => mapModalRef.current?.handleModal()}
-          style={styles.mapBtn}>
-          <AppText text="Show on Map" style={styles.mapText} />
-        </AppButton>
-      </View>
+      </SafeAreaView>
     </>
   );
 };

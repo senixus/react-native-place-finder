@@ -4,8 +4,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import {Modal, View} from 'react-native';
+import {Modal, StatusBar, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 export interface IModalRef {
   handleModal: () => void;
@@ -33,7 +34,13 @@ const FullScreenModal: ForwardRefRenderFunction<IModalRef, IProps> = (
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => setModalVisible(!modalVisible)}>
-      <View style={styles.centeredView}>{children}</View>
+      <SafeAreaProvider>
+        <SafeAreaView
+          edges={['top']}
+          style={{flex: 1, backgroundColor: 'transparent'}}>
+          <View style={styles.centeredView}>{children}</View>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </Modal>
   );
 };
