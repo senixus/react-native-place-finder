@@ -131,8 +131,6 @@ const styles = EStyleSheet.create({
   image: {
     height: '170rem',
     width: '100%',
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
     backgroundColor: '#000',
   },
   backBtn: {

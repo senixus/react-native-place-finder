@@ -28,7 +28,7 @@ const DetailCard: FC<IProps> = ({totalReview, handleModal}) => {
   return (
     <View style={styles.innerContainer}>
       <View style={styles.infoContainer}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, marginTop: 50}}>
           <AppText text={businessDetail?.name} style={styles.title} />
           <View style={styles.subInfo}>
             <Image source={star} style={styles.star} />
@@ -103,7 +103,7 @@ const styles = EStyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
-    right: 0,
+    left: 0,
     top: -50,
     shadowColor: '#000',
     shadowOffset: {
@@ -116,8 +116,10 @@ const styles = EStyleSheet.create({
   },
   logo: {
     borderRadius: 100,
-    height: '70rem',
-    width: '70rem',
+    height: '90rem',
+    width: '90rem',
+    borderWidth: 3,
+    borderColor: '#fff',
   },
   title: {
     fontSize: '17rem',

@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 
@@ -62,39 +63,43 @@ const SearchModal: ForwardRefRenderFunction<IModalRef, IProps> = (
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => setModalVisible(!modalVisible)}>
-      <KeyboardAvoidingView
-        style={styles.centeredView}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <AppButton
-              onPress={() => setModalVisible(!modalVisible)}
-              style={styles.closeBtn}>
-              <Image source={close} />
-            </AppButton>
-            <View style={{...styles.inputItem, marginTop: 100}}>
-              <AppText text="Food, Drink etc..." style={styles.label} />
-              <AppInput
-                value={term}
-                setValue={(value: string) => setTerm(value)}
-                placeholder="Pasta, Coffee, Beer etc..."
-              />
-            </View>
-            <View style={styles.inputItem}>
-              <AppText text="Location" style={styles.label} />
-              <AppInput
-                value={location}
-                setValue={(value: string) => setLocation(value)}
-                placeholder="New York"
-              />
-            </View>
+      <SafeAreaProvider>
+        <SafeAreaView edges={['top']} style={{flex: 1}}>
+          <KeyboardAvoidingView
+            style={styles.centeredView}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <AppButton
+                  onPress={() => setModalVisible(!modalVisible)}
+                  style={styles.closeBtn}>
+                  <Image source={close} />
+                </AppButton>
+                <View style={{...styles.inputItem, marginTop: 100}}>
+                  <AppText text="Food, Drink etc..." style={styles.label} />
+                  <AppInput
+                    value={term}
+                    setValue={(value: string) => setTerm(value)}
+                    placeholder="Pasta, Coffee, Beer etc..."
+                  />
+                </View>
+                <View style={styles.inputItem}>
+                  <AppText text="Location" style={styles.label} />
+                  <AppInput
+                    value={location}
+                    setValue={(value: string) => setLocation(value)}
+                    placeholder="New York"
+                  />
+                </View>
 
-            <AppButton style={styles.button} onPress={search}>
-              <Text style={styles.text}>Search</Text>
-            </AppButton>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+                <AppButton style={styles.button} onPress={search}>
+                  <Text style={styles.text}>Search</Text>
+                </AppButton>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </Modal>
   );
 };
