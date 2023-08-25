@@ -26,4 +26,8 @@ export interface ISearchItem {
   phone: string;
   display_phone: string;
   distance: number;
+  location: {
+    city: string;
+    country: string;
+  };
 }

@@ -24,22 +24,46 @@ const SearchCard: FC<IProps> = ({onDetail, searchItem}) => {
       <Image
         resizeMode="cover"
         source={
-          searchItem?.image_url ? {uri: searchItem?.image_url} : defaultPhoto
+          searchItem?.image_url ? {uri: searchItem.image_url} : defaultPhoto
         }
         style={styles.img}
       />
-      <AppText text={searchItem?.name} style={styles.title} />
-      <View style={styles.ratingContainer}>
-        <View style={styles.innerRatingContainer}>
-          <Image source={star} />
-          <AppText text={searchItem?.rating} style={styles.rating} />
+      <View style={styles.innerContainer}>
+        <AppText text={searchItem.name} style={styles.title} />
+        <View style={styles.innerChildContainer}>
+          <AppText
+            text={searchItem?.is_closed ? 'Closed' : 'Open'}
+            style={{
+              ...styles.reviewCount,
+              color: searchItem?.is_closed ? '#ff0e0e' : '#4bb543',
+              marginVertical: 4,
+            }}
+          />
+          <View style={styles.labelContainer}>
+            {searchItem.categories?.length > 0 &&
+              searchItem.categories?.map((item, i) => (
+                <View style={styles.label}>
+                  <AppText text={item.title} style={styles.labelText} />
+                </View>
+              ))}
+          </View>
+          <AppText
+            text={`${searchItem.location?.city}, ${searchItem.location?.country}`}
+            style={styles.text}
+          />
         </View>
-        <AppText
-          text={`(${
-            searchItem?.review_count > 500 ? '500+' : searchItem?.review_count
-          })`}
-          style={styles.reviewCount}
-        />
+        <View style={styles.ratingContainer}>
+          <View style={styles.innerRatingContainer}>
+            <Image source={star} />
+            <AppText text={searchItem?.rating} style={styles.rating} />
+          </View>
+          <AppText
+            text={`(${
+              searchItem?.review_count > 500 ? '500+' : searchItem?.review_count
+            })`}
+            style={styles.reviewCount}
+          />
+        </View>
       </View>
     </AppButton>
   );
@@ -54,19 +78,28 @@ const styles = EStyleSheet.create({
     borderColor: '#ddd',
     marginHorizontal: 5,
     borderRadius: 10,
+    flexDirection: 'row',
+  },
+  innerContainer: {
+    flex: 1,
   },
   img: {
-    borderTopRightRadius: 10,
+    height: 'auto',
+    width: '130rem',
     borderTopLeftRadius: 10,
-    height: '150rem',
-    width: '100%',
+    borderBottomLeftRadius: 10,
   },
   title: {
-    fontSize: '15rem',
+    fontSize: '16rem',
     fontWeight: '700',
     color: '#202533',
     paddingTop: 10,
     paddingLeft: 10,
+    flex: 1,
+  },
+  innerChildContainer: {
+    paddingLeft: 10,
+    marginVertical: 5,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -86,5 +119,25 @@ const styles = EStyleSheet.create({
   },
   reviewCount: {
     color: '#4f5a79',
+  },
+  text: {
+    marginVertical: 7,
+    color: '#252a38',
+  },
+  label: {
+    backgroundColor: '#e00707',
+    marginRight: 7,
+    borderRadius: 100,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    marginTop: 5,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 4,
+  },
+  labelText: {
+    color: '#fff',
   },
 });
