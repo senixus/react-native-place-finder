@@ -15,7 +15,8 @@ import FullScreenImage, {IModalRef} from '../components/detail/Modal';
 import ReviewCard from '../components/review/ReviewCard';
 import DetailCard from '../components/detail/DetailCard';
 import AppButton from '../components/common/AppButton';
-import AppText from '../components/common/AppText';
+//import AppText from '../components/common/AppText';
+import AppText from '@components/common/AppText';
 
 // Interfaces
 import {IBusinessDetail} from '../interfaces/detail.interface';
