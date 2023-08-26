@@ -5,10 +5,10 @@ import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Interfaces
-import {ISearchItem} from '../../interfaces/search.interface';
+import {ISearchItem} from '@interfaces/search.interface';
 
 // Components
-import AppText from '../common/AppText';
+import AppText from '@components/common/AppText';
 
 interface IProps {
   setMarkerItem?: (value: ISearchItem) => void;

@@ -11,25 +11,24 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import FullScreenImage, {IModalRef} from '../components/detail/Modal';
-import ReviewCard from '../components/review/ReviewCard';
-import DetailCard from '../components/detail/DetailCard';
-import AppButton from '../components/common/AppButton';
-//import AppText from '../components/common/AppText';
+import FullScreenImage, {IModalRef} from '@components/detail/Modal';
+import ReviewCard from '@components/review/ReviewCard';
+import DetailCard from '@components/detail/DetailCard';
+import AppButton from '@components/common/AppButton';
 import AppText from '@components/common/AppText';
 
 // Interfaces
-import {IBusinessDetail} from '../interfaces/detail.interface';
-import {IAppParams} from '../interfaces/app.interface';
-import {IReview} from '../interfaces/review.interface';
+import {IBusinessDetail} from '@interfaces/detail.interface';
+import {IAppParams} from '@interfaces/app.interface';
+import {IReview} from '@interfaces/review.interface';
 
 // Assets
-import defaultPhoto from '../assets/default-photo.png';
-import back from '../assets/left-arrow.png';
-import close from '../assets/close-circle.png';
+import defaultPhoto from '@assets/default-photo.png';
+import close from '@assets/close-circle.png';
+import back from '@assets/left-arrow.png';
 
 // API
-import yelp from '../api';
+import yelp from '@api/index';
 
 interface IProps {
   navigation: StackNavigationProp<IAppParams, 'Detail'>;

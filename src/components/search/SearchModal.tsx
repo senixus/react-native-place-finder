@@ -17,15 +17,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 
 // Components
-import AppInput from '../common/AppInput';
-import AppButton from '../common/AppButton';
-import AppText from '../common/AppText';
+import AppButton from '@components/common/AppButton';
+import AppInput from '@components/common/AppInput';
+import AppText from '@components/common/AppText';
 
 // Assets
-import close from '../../assets/close-circle.png';
-
-// Actions
-import {searchQuery} from '../../redux/searchSlice';
+import close from '@assets/close-circle.png';
 
 export interface IModalRef {
   handleModal: () => void;

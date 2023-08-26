@@ -4,7 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import {Modal, StatusBar, View} from 'react-native';
+import {Modal, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 

@@ -2,9 +2,8 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import {Image, View, FlatList, StatusBar, Platform, Alert} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 import {
   PERMISSIONS,
   RESULTS,
@@ -14,26 +13,26 @@ import {
 } from 'react-native-permissions';
 
 // Components
-import AppText from '../components/common/AppText';
-import AppButton from '../components/common/AppButton';
-import SearchCard from '../components/search/SearchCard';
-import SearchModal, {IModalRef} from '../components/search/SearchModal';
+import SearchModal, {IModalRef} from '@components/search/SearchModal';
+import PreviewLocation from '@components/map/PreviewLocation';
+import SearchCard from '@components/search/SearchCard';
+import AppButton from '@components/common/AppButton';
+import AppText from '@components/common/AppText';
+import Map from '@components/map/Map';
 import FullScreenModal, {
   IModalRef as IFullScreenRef,
-} from '../components/detail/Modal';
-import Map from '../components/map/Map';
-import PreviewLocation from '../components/map/PreviewLocation';
+} from '@components/detail/Modal';
 
 // Assets
-import filter from '../assets/edit.png';
-import close from '../assets/close-circle.png';
+import close from '@assets/close-circle.png';
+import filter from '@assets/edit.png';
 
 // Interface
-import {IAppParams} from '../interfaces/app.interface';
-import {ISearchItem} from '../interfaces/search.interface';
+import {ISearchItem} from '@interfaces/search.interface';
+import {IAppParams} from '@interfaces/app.interface';
 
 // API
-import yelp from '../api';
+import yelp from '@api/index';
 
 const LOCATION =
   Platform.OS === 'android'

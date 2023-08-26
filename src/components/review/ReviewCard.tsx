@@ -3,15 +3,15 @@ import {Image, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import AppText from '../common/AppText';
+import AppText from '@components/common/AppText';
 
 // Assets
-import star from '../../assets/filled-star.png';
-import defaultPhoto from '../../assets/default-profile-photo.png';
-import unfilled from '../../assets/star.png';
+import defaultPhoto from '@assets/default-profile-photo.png';
+import star from '@assets/filled-star.png';
+import unfilled from '@assets/star.png';
 
 // Interfaces
-import {IReviewItem} from '../../interfaces/review.interface';
+import {IReviewItem} from '@interfaces/review.interface';
 
 interface IProps {
   review: IReviewItem;

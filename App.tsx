@@ -5,8 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
 
 // Screens
-import Detail from './src/screens/Detail';
-import Home from './src/screens/Home';
+import Detail from '@screens/Detail';
+import Home from '@screens/Home';
 
 // Store
 import store from './src/redux/store';

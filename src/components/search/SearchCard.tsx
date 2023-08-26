@@ -3,15 +3,15 @@ import {View, Image} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import AppButton from '../common/AppButton';
-import AppText from '../common/AppText';
+import AppButton from '@components/common/AppButton';
+import AppText from '@components/common/AppText';
 
 // Interface
-import {ISearchItem} from '../../interfaces/search.interface';
+import {ISearchItem} from '@interfaces/search.interface';
 
 // Assets
-import star from '../../assets/filled-star.png';
-import defaultPhoto from '../../assets/default-photo.png';
+import defaultPhoto from '@assets/default-photo.png';
+import star from '@assets/filled-star.png';
 
 interface IProps {
   onDetail: () => void;

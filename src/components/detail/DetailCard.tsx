@@ -3,15 +3,15 @@ import {View, Image, ScrollView} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import AppText from '../common/AppText';
-import AppButton from '../common/AppButton';
+import AppText from '@components/common/AppText';
+import AppButton from '@components/common/AppButton';
 
 // Assets
-import star from '../../assets/filled-star.png';
-import defaultPhoto from '../../assets/default-photo.png';
+import star from '@assets/filled-star.png';
+import defaultPhoto from '@assets/default-photo.png';
 
 // Interfaces
-import {IBusinessDetail} from '../../interfaces/detail.interface';
+import {IBusinessDetail} from '@interfaces/detail.interface';
 
 interface IProps {
   totalReview: number;
