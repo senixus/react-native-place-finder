@@ -42,7 +42,7 @@ const SearchCard: FC<IProps> = ({onDetail, searchItem}) => {
           <View style={styles.labelContainer}>
             {searchItem.categories?.length > 0 &&
               searchItem.categories?.map((item, i) => (
-                <View style={styles.label}>
+                <View key={i} style={styles.label}>
                   <AppText text={item.title} style={styles.labelText} />
                 </View>
               ))}

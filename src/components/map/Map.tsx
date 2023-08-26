@@ -3,10 +3,8 @@ import {View} from 'react-native';
 import ClusterMapView from 'react-native-map-clustering';
 import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {useSelector} from 'react-redux';
 
 // Interfaces
-import {ISearchSelector} from '../../redux/searchSlice';
 import {ISearchItem} from '../../interfaces/search.interface';
 
 // Components
@@ -14,15 +12,12 @@ import AppText from '../common/AppText';
 
 interface IProps {
   setMarkerItem?: (value: ISearchItem) => void;
+  searchItems: ISearchItem[];
 }
 
-const Map: FC<IProps> = ({setMarkerItem}) => {
-  const searchItems = useSelector<ISearchSelector, ISearchItem[]>(
-    state => state.search.searchItems,
-  );
-
+const Map: FC<IProps> = ({setMarkerItem, searchItems}) => {
   useEffect(() => {
-    return () => setMarkerItem && setMarkerItem({} as ISearchItem);
+    return () => setMarkerItem?.({} as ISearchItem);
   }, []);
 
   return (

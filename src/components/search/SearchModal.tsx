@@ -34,12 +34,13 @@ export interface IModalRef {
 interface IProps {
   setLocation: (value: string) => void;
   setTerm: (value: string) => void;
+  searchBusiness: () => void;
   location: string;
   term: string;
 }
 
 const SearchModal: ForwardRefRenderFunction<IModalRef, IProps> = (
-  {setLocation, setTerm, location, term},
+  {setLocation, setTerm, location, term, searchBusiness},
   ref,
 ) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -53,7 +54,7 @@ const SearchModal: ForwardRefRenderFunction<IModalRef, IProps> = (
   }));
 
   const search = () => {
-    dispatch(searchQuery({location, term}));
+    searchBusiness();
     setModalVisible(false);
   };
 

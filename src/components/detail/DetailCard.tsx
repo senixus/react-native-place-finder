@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {View, Image, ScrollView} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {useSelector} from 'react-redux';
 
 // Components
 import AppText from '../common/AppText';
@@ -13,40 +12,46 @@ import defaultPhoto from '../../assets/default-photo.png';
 
 // Interfaces
 import {IBusinessDetail} from '../../interfaces/detail.interface';
-import {ISearchSelector} from '../../redux/searchSlice';
 
 interface IProps {
   totalReview: number;
   handleModal: (value: string) => void;
+  businessDetail: IBusinessDetail;
 }
 
-const DetailCard: FC<IProps> = ({totalReview, handleModal}) => {
-  const businessDetail = useSelector<ISearchSelector, IBusinessDetail>(
-    state => state.search.detail,
-  );
-
+const DetailCard: FC<IProps> = ({totalReview, handleModal, businessDetail}) => {
   return (
     <View style={styles.innerContainer}>
       <View style={styles.infoContainer}>
         <View style={{flex: 1, marginTop: 50}}>
-          <AppText text={businessDetail?.name} style={styles.title} />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <AppText text={businessDetail?.name} style={styles.title} />
+            <View
+              style={{
+                ...styles.dot,
+                width: 10,
+                height: 10,
+                backgroundColor: businessDetail?.is_closed
+                  ? '#ff0e0e'
+                  : '#4bb543',
+              }}
+            />
+          </View>
+
           <View style={styles.subInfo}>
             <Image source={star} style={styles.star} />
             <AppText text={businessDetail?.rating} style={styles.text} />
-            <View style={styles.dot} />
-            <AppText
-              text={
-                businessDetail?.categories?.length > 0
-                  ? businessDetail?.categories[0]?.title
-                  : ''
-              }
-              style={styles.text}
-            />
+            {/* <View style={styles.dot} /> */}
           </View>
-          <AppText
-            text={`${totalReview} Review(s)`}
-            style={styles.totalReview}
-          />
+          <View style={styles.labelContainer}>
+            {businessDetail.categories?.length > 0 &&
+              businessDetail.categories?.map((item, i) => (
+                <View key={i} style={styles.label}>
+                  <AppText text={item.title} style={styles.labelText} />
+                </View>
+              ))}
+          </View>
+
           <AppText
             text={businessDetail?.location?.display_address
               ?.join(',')
@@ -68,10 +73,7 @@ const DetailCard: FC<IProps> = ({totalReview, handleModal}) => {
       </View>
       {businessDetail?.photos?.length > 0 && (
         <>
-          <AppText
-            text="Photo(s)"
-            style={{...styles.title, marginVertical: 7}}
-          />
+          <AppText text="Photo" style={{...styles.title, marginVertical: 7}} />
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {businessDetail?.photos?.map(photo => (
               <AppButton key={photo} onPress={() => handleModal(photo)}>
@@ -100,6 +102,7 @@ const styles = EStyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     position: 'relative',
+    marginVertical: 15,
   },
   logoContainer: {
     position: 'absolute',
@@ -161,5 +164,21 @@ const styles = EStyleSheet.create({
     height: 200,
     marginRight: 5,
     borderRadius: 5,
+  },
+  label: {
+    backgroundColor: '#e00707',
+    marginRight: 7,
+    borderRadius: 100,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    marginTop: 5,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 4,
+  },
+  labelText: {
+    color: '#fff',
   },
 });
