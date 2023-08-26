@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
@@ -77,9 +77,14 @@ const styles = EStyleSheet.create({
     flex: 1,
     borderRadius: 10,
     margin: 10,
+    ...Platform.select({
+      ios: {
+        marginBottom: 25,
+      },
+    }),
   },
   image: {
-    height: '100rem',
+    height: '100%',
     width: 100,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
