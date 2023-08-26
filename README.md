@@ -1,17 +1,17 @@
 # React Native Place Finder
 
-A simple place finder. I used yelp API to fetch places data.
+A simple place finder. I used Yelp API to fetch places data.
 
 ## Installation
 
-After cloning the project, you need to get map API and yelp API.
+After cloning the project, you need to get map API and Yelp API.
 
 - [Yelp API](https://www.yelp.com/developers/)
 - [Map SDK for Android](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
 
-You can add your yelp API  to `api.ts`
+You can add your Yelp API  to `api.ts`
 
-After the creating your android map API key. You need to add to your manifest file `android/app/src/main/AndroidManifest.xml`
+After creating your Android map API key. You need to add to your manifest file `android/app/src/main/AndroidManifest.xml`
 
 ```xml
 <application>
@@ -25,7 +25,7 @@ After the creating your android map API key. You need to add to your manifest fi
 If you want to use on IOS, you can follow [IOS](https://github.com/react-native-maps/react-native-maps/blob/HEAD/docs/installation.md) steps.
 
 
-After the finishing configuration steps you can run the app
+After finishing the configuration steps you can run the app
 
 ```
 yarn run android
