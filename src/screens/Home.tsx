@@ -1,10 +1,17 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, View, FlatList, StatusBar} from 'react-native';
+import {Image, View, FlatList, StatusBar, Platform, Alert} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  PERMISSIONS,
+  RESULTS,
+  check,
+  request,
+  openSettings,
+} from 'react-native-permissions';
 
 // Components
 import AppText from '../components/common/AppText';
@@ -23,34 +30,43 @@ import close from '../assets/close-circle.png';
 
 // Interface
 import {IAppParams} from '../interfaces/app.interface';
-import {ISearchSelector, searchQuery} from '../redux/searchSlice';
 import {ISearchItem} from '../interfaces/search.interface';
 
-interface IProps {
-  navigation: StackNavigationProp<IAppParams, 'Home'>;
-  route: RouteProp<IAppParams, 'Home'>;
-}
+// API
+import yelp from '../api';
 
-const Search: FC<IProps> = ({route}) => {
+const LOCATION =
+  Platform.OS === 'android'
+    ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+    : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE;
+
+const Search = () => {
   // States
   const [location, setLocation] = useState('New York');
   const [term, setTerm] = useState('coffee');
   const [markerItem, setMarkerItem] = useState<ISearchItem>();
+  const [searchItems, setSearchItems] = useState<ISearchItem[]>([]);
 
   // Refs
   const modalRef = useRef<IModalRef>(null);
   const mapModalRef = useRef<IFullScreenRef>(null);
 
   // Hooks
-  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<IAppParams, 'Search'>>();
-  const searchItems = useSelector<ISearchSelector, ISearchItem[]>(
-    state => state.search.searchItems,
-  );
 
   useEffect(() => {
-    dispatch(searchQuery({location, term}));
+    search();
   }, []);
+
+  const search = async () => {
+    try {
+      const qs = new URLSearchParams({location, term}).toString();
+      const response = await yelp.get(`/businesses/search?${qs}`);
+      setSearchItems(response.data.businesses);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderItem = ({item}: {item: ISearchItem}) => (
     <SearchCard
@@ -64,10 +80,30 @@ const Search: FC<IProps> = ({route}) => {
     mapModalRef.current?.handleModal();
   };
 
+  const checkPermission = async () => {
+    const result = await check(LOCATION);
+    if (result === RESULTS.DENIED) {
+      const response = await request(LOCATION);
+      if (response === RESULTS.GRANTED || response === RESULTS.LIMITED) {
+        console.log(response);
+      }
+    } else if (result !== RESULTS.GRANTED && result !== RESULTS.LIMITED) {
+      Alert.alert('Location Permission', 'App need location permission', [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'Open Settings', onPress: () => openSettings()},
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
   return (
     <>
       <StatusBar barStyle={'dark-content'} />
       <SearchModal
+        searchBusiness={search}
         ref={modalRef}
         location={location}
         term={term}
@@ -88,8 +124,7 @@ const Search: FC<IProps> = ({route}) => {
         ) : (
           <></>
         )}
-
-        <Map setMarkerItem={setMarkerItem} />
+        <Map searchItems={searchItems} setMarkerItem={setMarkerItem} />
       </FullScreenModal>
       <SafeAreaView edges={['top']} style={{flex: 1}}>
         <View style={styles.container}>
@@ -105,6 +140,7 @@ const Search: FC<IProps> = ({route}) => {
             data={searchItems}
             renderItem={renderItem}
             keyExtractor={item => item?.id}
+            contentContainerStyle={{paddingBottom: 20}}
           />
           <AppButton
             onPress={() => mapModalRef.current?.handleModal()}

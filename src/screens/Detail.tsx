@@ -9,30 +9,26 @@ import {
   ImageBackground,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {useDispatch, useSelector} from 'react-redux';
 
 // Components
-import ReviewCard from '../components/review/ReviewCard';
 import FullScreenImage, {IModalRef} from '../components/detail/Modal';
-import AppButton from '../components/common/AppButton';
+import ReviewCard from '../components/review/ReviewCard';
 import DetailCard from '../components/detail/DetailCard';
-import Loading from '../components/common/Loading';
+import AppButton from '../components/common/AppButton';
+import AppText from '../components/common/AppText';
 
 // Interfaces
-import {IAppParams} from '../interfaces/app.interface';
-import {
-  getBusinessDetail,
-  getReviewsByBusinessId,
-  ISearchSelector,
-} from '../redux/searchSlice';
-
-import {IReview} from '../interfaces/review.interface';
 import {IBusinessDetail} from '../interfaces/detail.interface';
+import {IAppParams} from '../interfaces/app.interface';
+import {IReview} from '../interfaces/review.interface';
 
 // Assets
 import defaultPhoto from '../assets/default-photo.png';
 import back from '../assets/left-arrow.png';
 import close from '../assets/close-circle.png';
+
+// API
+import yelp from '../api';
 
 interface IProps {
   navigation: StackNavigationProp<IAppParams, 'Detail'>;
@@ -40,17 +36,12 @@ interface IProps {
 }
 
 const Detail: FC<IProps> = ({navigation, route}) => {
-  // Hooks
-  const dispatch = useDispatch();
-  const businessDetail = useSelector<ISearchSelector, IBusinessDetail>(
-    state => state.search.detail,
-  );
-  const review = useSelector<ISearchSelector, IReview>(
-    state => state.search.reviews,
-  );
-
   // States
   const [image, setImage] = useState('');
+  const [businessDetail, setBusinessDetail] = useState<IBusinessDetail>(
+    {} as IBusinessDetail,
+  );
+  const [review, setReview] = useState<IReview>({reviews: [], total: 0});
 
   // Route Params
   const {id} = route.params;
@@ -58,17 +49,28 @@ const Detail: FC<IProps> = ({navigation, route}) => {
   // Refs
   const modalRef = useRef<IModalRef>(null);
 
+  const getBusinessDetail = async () => {
+    try {
+      const [detailResponse, reviewResponse] = await Promise.all([
+        yelp.get(`/businesses/${id}`),
+        yelp.get(`/businesses/${id}/reviews`),
+      ]);
+
+      setBusinessDetail(detailResponse.data);
+      setReview(reviewResponse.data);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') console.log(error);
+    }
+  };
+
   useEffect(() => {
-    dispatch(getBusinessDetail(id));
-    dispatch(getReviewsByBusinessId(id));
-  }, [route]);
+    getBusinessDetail();
+  }, []);
 
   const handleModal = (img: string) => {
     setImage(img);
     modalRef?.current?.handleModal();
   };
-
-  if (!businessDetail.id) return <Loading />;
 
   return (
     <>
@@ -101,12 +103,25 @@ const Detail: FC<IProps> = ({navigation, route}) => {
             <DetailCard
               handleModal={(photo: string) => handleModal(photo)}
               totalReview={review?.total}
+              businessDetail={businessDetail}
             />
 
-            {review?.reviews?.length > 0 &&
-              review?.reviews?.map(review => (
-                <ReviewCard review={review} key={review?.id} />
-              ))}
+            {review.reviews?.length > 0 && (
+              <View>
+                <View style={styles.reviewTitleContainer}>
+                  <AppText text="Reviews" style={styles.reviewTitle} />
+                  <View style={styles.dot} />
+                  <AppText
+                    text={`${review?.total} Review(s)`}
+                    style={styles.totalReview}
+                  />
+                </View>
+
+                {review.reviews?.map(review => (
+                  <ReviewCard review={review} key={review?.id} />
+                ))}
+              </View>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -144,5 +159,25 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
+  },
+  reviewTitle: {
+    fontSize: '17rem',
+    textTransform: 'capitalize',
+    letterSpacing: 0.5,
+    fontWeight: '700',
+    color: '#202533',
+  },
+  reviewTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    paddingLeft: 10,
+  },
+  dot: {
+    width: '4rem',
+    height: '4rem',
+    borderRadius: 100,
+    backgroundColor: '#4f5a79',
+    marginHorizontal: 7,
   },
 });
