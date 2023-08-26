@@ -24,6 +24,9 @@ import AppText from '@components/common/AppText';
 // Assets
 import close from '@assets/close-circle.png';
 
+// Utils
+import {color} from '@utils/color';
+
 export interface IModalRef {
   handleModal: () => void;
 }
@@ -112,7 +115,7 @@ const styles = EStyleSheet.create({
     left: 10,
   },
   modalView: {
-    backgroundColor: '#fff',
+    backgroundColor: color.mono.white,
     position: 'relative',
     flex: 1,
     padding: 25,
@@ -125,14 +128,14 @@ const styles = EStyleSheet.create({
     marginTop: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#d82227',
+    backgroundColor: color.red.primary,
   },
   inputItem: {
     marginTop: 20,
     marginBottom: 10,
   },
   text: {
-    color: 'white',
+    color: color.mono.white,
     fontWeight: 'bold',
     textAlign: 'center',
     letterSpacing: 0.8,

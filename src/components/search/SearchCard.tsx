@@ -13,6 +13,9 @@ import {ISearchItem} from '@interfaces/search.interface';
 import defaultPhoto from '@assets/default-photo.png';
 import star from '@assets/filled-star.png';
 
+// Utils
+import {color} from '@utils/color';
+
 interface IProps {
   onDetail: () => void;
   searchItem: ISearchItem;
@@ -75,7 +78,7 @@ const styles = EStyleSheet.create({
   container: {
     marginVertical: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: color.gray.secondary,
     marginHorizontal: 5,
     borderRadius: 10,
     flexDirection: 'row',
@@ -92,7 +95,7 @@ const styles = EStyleSheet.create({
   title: {
     fontSize: '16rem',
     fontWeight: '700',
-    color: '#202533',
+    color: color.mono.black,
     paddingTop: 10,
     paddingLeft: 10,
     flex: 1,
@@ -114,18 +117,18 @@ const styles = EStyleSheet.create({
   rating: {
     marginRight: 10,
     marginLeft: 5,
-    color: '#202533',
+    color: color.mono.black,
     fontWeight: '600',
   },
   reviewCount: {
-    color: '#4f5a79',
+    color: color.gray.primary,
   },
   text: {
     marginVertical: 7,
-    color: '#252a38',
+    color: color.mono.black,
   },
   label: {
-    backgroundColor: '#e00707',
+    backgroundColor: color.red.primary,
     marginRight: 7,
     borderRadius: 100,
     paddingVertical: 3,
@@ -138,6 +141,6 @@ const styles = EStyleSheet.create({
     marginVertical: 4,
   },
   labelText: {
-    color: '#fff',
+    color: color.mono.white,
   },
 });

@@ -10,6 +10,9 @@ import {ISearchItem} from '@interfaces/search.interface';
 // Components
 import AppText from '@components/common/AppText';
 
+// Utils
+import {color} from '@utils/color';
+
 interface IProps {
   setMarkerItem?: (value: ISearchItem) => void;
   searchItems: ISearchItem[];
@@ -25,7 +28,7 @@ const Map: FC<IProps> = ({setMarkerItem, searchItems}) => {
       <ClusterMapView
         animationEnabled={false}
         toolbarEnabled={false}
-        clusterColor="#d82227"
+        clusterColor={color.red.primary}
         clusteringEnabled={true}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -61,9 +64,9 @@ const styles = EStyleSheet.create({
     flex: 1,
   },
   btn: {
-    backgroundColor: '#d82227',
+    backgroundColor: color.red.primary,
     borderWidth: 1,
-    borderColor: '#d82227',
+    borderColor: color.red.primary,
     borderRadius: 100,
     height: '35rem',
     justifyContent: 'center',
@@ -71,7 +74,7 @@ const styles = EStyleSheet.create({
     paddingHorizontal: 15,
   },
   name: {
-    color: '#fff',
+    color: color.mono.white,
     letterSpacing: 0.5,
     fontSize: '13rem',
   },

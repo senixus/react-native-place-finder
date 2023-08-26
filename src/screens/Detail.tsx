@@ -30,6 +30,9 @@ import back from '@assets/left-arrow.png';
 // API
 import yelp from '@api/index';
 
+// Utils
+import {color} from '@utils/color';
+
 interface IProps {
   navigation: StackNavigationProp<IAppParams, 'Detail'>;
   route: RouteProp<IAppParams, 'Detail'>;
@@ -134,7 +137,7 @@ export default Detail;
 const styles = EStyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: color.mono.white,
   },
   container: {
     flex: 1,
@@ -152,7 +155,7 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     left: 10,
     top: 10,
-    backgroundColor: 'white',
+    backgroundColor: color.mono.white,
     borderRadius: 100,
   },
   closeBtn: {
@@ -165,7 +168,7 @@ const styles = EStyleSheet.create({
     textTransform: 'capitalize',
     letterSpacing: 0.5,
     fontWeight: '700',
-    color: '#202533',
+    color: color.mono.black,
   },
   reviewTitleContainer: {
     flexDirection: 'row',
@@ -177,7 +180,7 @@ const styles = EStyleSheet.create({
     width: '4rem',
     height: '4rem',
     borderRadius: 100,
-    backgroundColor: '#4f5a79',
+    backgroundColor: color.gray.primary,
     marginHorizontal: 7,
   },
 });

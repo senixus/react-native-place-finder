@@ -2,6 +2,9 @@ import React, {FC} from 'react';
 import {TextInput} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+// Utils
+import {color} from '@utils/color';
+
 interface IProps {
   placeholder: string;
   value: string;
@@ -49,7 +52,7 @@ export default AppInput;
 
 const styles = EStyleSheet.create({
   input: {
-    backgroundColor: 'white',
+    backgroundColor: color.mono.white,
     borderWidth: 1,
     borderColor: '#ced4da',
     height: '36rem',

@@ -3,15 +3,18 @@ import {View, Image, Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import AppButton from '../common/AppButton';
-import AppText from '../common/AppText';
+import AppButton from '@components/common/AppButton';
+import AppText from '@components/common/AppText';
 
 // Assets
-import star from '../../assets/filled-star.png';
-import defaultPhoto from '../../assets/default-photo.png';
+import defaultPhoto from '@assets/default-photo.png';
+import star from '@assets/filled-star.png';
 
 // Interfaces
-import {ISearchItem} from '../../interfaces/search.interface';
+import {ISearchItem} from '@interfaces/search.interface';
+
+// Utils
+import {color} from '@utils/color';
 
 interface IProps {
   markerItem: ISearchItem;
@@ -70,7 +73,7 @@ const styles = EStyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
-    backgroundColor: '#fff',
+    backgroundColor: color.mono.white,
     flexDirection: 'row',
     alignItems: 'flex-start',
     height: '110rem',
@@ -93,7 +96,7 @@ const styles = EStyleSheet.create({
     marginBottom: 5,
     fontSize: '15rem',
     fontWeight: '600',
-    color: '#202533',
+    color: color.mono.black,
   },
   cardInfoItem: {
     paddingLeft: 7,
@@ -106,6 +109,6 @@ const styles = EStyleSheet.create({
   rating: {
     marginLeft: 7,
     fontWeight: '500',
-    color: '#4f5a79',
+    color: color.gray.primary,
   },
 });

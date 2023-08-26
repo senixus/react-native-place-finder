@@ -34,6 +34,9 @@ import {IAppParams} from '@interfaces/app.interface';
 // API
 import yelp from '@api/index';
 
+// Utils
+import {color} from '@utils/color';
+
 const LOCATION =
   Platform.OS === 'android'
     ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
@@ -157,7 +160,7 @@ export default Search;
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.mono.white,
     position: 'relative',
   },
   filterBtn: {
@@ -168,7 +171,7 @@ const styles = EStyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
     fontSize: '15rem',
-    color: '#202533',
+    color: color.mono.black,
   },
   filterHeader: {
     flexDirection: 'row',
@@ -177,7 +180,7 @@ const styles = EStyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: color.gray.secondary,
   },
   filterIcon: {
     width: 30,
@@ -187,9 +190,9 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: '#d82227',
+    backgroundColor: color.red.primary,
     borderWidth: 1,
-    borderColor: '#d82227',
+    borderColor: color.red.primary,
     borderRadius: 100,
     height: '35rem',
     justifyContent: 'center',
@@ -197,7 +200,7 @@ const styles = EStyleSheet.create({
     paddingHorizontal: 15,
   },
   mapText: {
-    color: '#fff',
+    color: color.mono.white,
     letterSpacing: 0.5,
     fontSize: '13rem',
   },

@@ -13,6 +13,9 @@ import unfilled from '@assets/star.png';
 // Interfaces
 import {IReviewItem} from '@interfaces/review.interface';
 
+// Utils
+import {color} from '@utils/color';
+
 interface IProps {
   review: IReviewItem;
 }
@@ -54,7 +57,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: color.gray.secondary,
   },
   innerContainer: {
     padding: 10,
@@ -71,13 +74,13 @@ const styles = EStyleSheet.create({
   },
   username: {
     fontWeight: '600',
-    color: '#202533',
+    color: color.mono.black,
     letterSpacing: 0.4,
     textTransform: 'capitalize',
   },
   description: {
     marginVertical: 8,
-    color: '#4f5a79',
+    color: color.gray.primary,
     letterSpacing: 0.5,
     fontWeight: '500',
   },

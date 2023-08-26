@@ -3,15 +3,18 @@ import {View, Image, ScrollView} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 // Components
-import AppText from '@components/common/AppText';
 import AppButton from '@components/common/AppButton';
+import AppText from '@components/common/AppText';
 
 // Assets
-import star from '@assets/filled-star.png';
 import defaultPhoto from '@assets/default-photo.png';
+import star from '@assets/filled-star.png';
 
 // Interfaces
 import {IBusinessDetail} from '@interfaces/detail.interface';
+
+// Utils
+import {color} from '@utils/color';
 
 interface IProps {
   totalReview: number;
@@ -122,17 +125,17 @@ const styles = EStyleSheet.create({
     height: '90rem',
     width: '90rem',
     borderWidth: 3,
-    borderColor: '#fff',
+    borderColor: color.mono.white,
   },
   title: {
     fontSize: '17rem',
     textTransform: 'capitalize',
     letterSpacing: 0.5,
     fontWeight: '700',
-    color: '#202533',
+    color: color.mono.black,
   },
   text: {
-    color: '#4f5a79',
+    color: color.gray.primary,
     fontWeight: '500',
     fontSize: '13rem',
     letterSpacing: 0.4,
@@ -141,7 +144,7 @@ const styles = EStyleSheet.create({
     width: '4rem',
     height: '4rem',
     borderRadius: 100,
-    backgroundColor: '#4f5a79',
+    backgroundColor: color.gray.primary,
     marginHorizontal: 7,
   },
   subInfo: {
@@ -153,7 +156,7 @@ const styles = EStyleSheet.create({
     marginRight: 5,
   },
   totalReview: {
-    color: '#4f5a79',
+    color: color.gray.primary,
     fontWeight: '500',
     fontSize: '13rem',
     letterSpacing: 0.4,
@@ -166,7 +169,7 @@ const styles = EStyleSheet.create({
     borderRadius: 5,
   },
   label: {
-    backgroundColor: '#e00707',
+    backgroundColor: color.red.primary,
     marginRight: 7,
     borderRadius: 100,
     paddingVertical: 3,
@@ -179,6 +182,6 @@ const styles = EStyleSheet.create({
     marginVertical: 4,
   },
   labelText: {
-    color: '#fff',
+    color: color.mono.white,
   },
 });
