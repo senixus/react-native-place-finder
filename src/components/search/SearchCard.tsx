@@ -15,6 +15,7 @@ import star from '@assets/filled-star.png';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 interface IProps {
   onDetail: () => void;
@@ -94,7 +95,7 @@ const styles = EStyleSheet.create({
   },
   title: {
     fontSize: '16rem',
-    fontWeight: '700',
+    fontFamily: font.bold,
     color: color.mono.black,
     paddingTop: 10,
     paddingLeft: 10,

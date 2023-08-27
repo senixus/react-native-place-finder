@@ -15,6 +15,7 @@ import {IBusinessDetail} from '@interfaces/detail.interface';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 interface IProps {
   totalReview: number;
@@ -131,14 +132,14 @@ const styles = EStyleSheet.create({
     fontSize: '17rem',
     textTransform: 'capitalize',
     letterSpacing: 0.5,
-    fontWeight: '700',
+    fontFamily: font.bold,
     color: color.mono.black,
   },
   text: {
     color: color.gray.primary,
-    fontWeight: '500',
     fontSize: '13rem',
     letterSpacing: 0.4,
+    fontFamily: font.medium,
   },
   dot: {
     width: '4rem',
@@ -157,10 +158,10 @@ const styles = EStyleSheet.create({
   },
   totalReview: {
     color: color.gray.primary,
-    fontWeight: '500',
     fontSize: '13rem',
     letterSpacing: 0.4,
     marginTop: 6,
+    fontFamily: font.medium,
   },
   photoItem: {
     width: 300,

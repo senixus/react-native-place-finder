@@ -7,6 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -32,6 +33,7 @@ import yelp from '@api/index';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 interface IProps {
   navigation: StackNavigationProp<IAppParams, 'Detail'>;
@@ -45,6 +47,7 @@ const Detail: FC<IProps> = ({navigation, route}) => {
     {} as IBusinessDetail,
   );
   const [review, setReview] = useState<IReview>({reviews: [], total: 0});
+  const [isLoading, setIsLoading] = useState(false);
 
   // Route Params
   const {id} = route.params;
@@ -54,6 +57,7 @@ const Detail: FC<IProps> = ({navigation, route}) => {
 
   const getBusinessDetail = async () => {
     try {
+      setIsLoading(true);
       const [detailResponse, reviewResponse] = await Promise.all([
         yelp.get(`/businesses/${id}`),
         yelp.get(`/businesses/${id}/reviews`),
@@ -61,7 +65,9 @@ const Detail: FC<IProps> = ({navigation, route}) => {
 
       setBusinessDetail(detailResponse.data);
       setReview(reviewResponse.data);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       if (process.env.NODE_ENV === 'development') console.log(error);
     }
   };
@@ -86,47 +92,55 @@ const Detail: FC<IProps> = ({navigation, route}) => {
         </AppButton>
       </FullScreenImage>
       <SafeAreaView style={styles.body}>
-        <ScrollView style={styles.body}>
+        {isLoading ? (
           <View style={styles.container}>
-            <ImageBackground
-              imageStyle={{opacity: 0.5}}
-              source={
-                businessDetail?.image_url
-                  ? {uri: businessDetail?.image_url}
-                  : defaultPhoto
-              }
-              style={styles.image}
-              resizeMode="cover"
-            />
-            <AppButton
-              onPress={() => navigation.goBack()}
-              style={styles.backBtn}>
-              <Image source={back} />
-            </AppButton>
-            <DetailCard
-              handleModal={(photo: string) => handleModal(photo)}
-              totalReview={review?.total}
-              businessDetail={businessDetail}
-            />
-
-            {review.reviews?.length > 0 && (
-              <View>
-                <View style={styles.reviewTitleContainer}>
-                  <AppText text="Reviews" style={styles.reviewTitle} />
-                  <View style={styles.dot} />
-                  <AppText
-                    text={`${review?.total} Review(s)`}
-                    style={styles.totalReview}
-                  />
-                </View>
-
-                {review.reviews?.map(review => (
-                  <ReviewCard review={review} key={review?.id} />
-                ))}
-              </View>
-            )}
+            <View style={styles.loader}>
+              <ActivityIndicator color={color.red.primary} />
+            </View>
           </View>
-        </ScrollView>
+        ) : (
+          <ScrollView style={styles.body}>
+            <View style={styles.container}>
+              <ImageBackground
+                imageStyle={{opacity: 0.5}}
+                source={
+                  businessDetail?.image_url
+                    ? {uri: businessDetail?.image_url}
+                    : defaultPhoto
+                }
+                style={styles.image}
+                resizeMode="cover"
+              />
+              <AppButton
+                onPress={() => navigation.goBack()}
+                style={styles.backBtn}>
+                <Image source={back} />
+              </AppButton>
+              <DetailCard
+                handleModal={(photo: string) => handleModal(photo)}
+                totalReview={review?.total}
+                businessDetail={businessDetail}
+              />
+
+              {review.reviews?.length > 0 && (
+                <View>
+                  <View style={styles.reviewTitleContainer}>
+                    <AppText text="Reviews" style={styles.reviewTitle} />
+                    <View style={styles.dot} />
+                    <AppText
+                      text={`${review?.total} Review(s)`}
+                      style={styles.totalReview}
+                    />
+                  </View>
+
+                  {review.reviews?.map(review => (
+                    <ReviewCard review={review} key={review?.id} />
+                  ))}
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        )}
       </SafeAreaView>
     </>
   );
@@ -167,8 +181,8 @@ const styles = EStyleSheet.create({
     fontSize: '17rem',
     textTransform: 'capitalize',
     letterSpacing: 0.5,
-    fontWeight: '700',
     color: color.mono.black,
+    fontFamily: font.bold,
   },
   reviewTitleContainer: {
     flexDirection: 'row',
@@ -182,5 +196,10 @@ const styles = EStyleSheet.create({
     borderRadius: 100,
     backgroundColor: color.gray.primary,
     marginHorizontal: 7,
+  },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });

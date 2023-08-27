@@ -15,6 +15,7 @@ import {ISearchItem} from '@interfaces/search.interface';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 interface IProps {
   markerItem: ISearchItem;
@@ -95,7 +96,7 @@ const styles = EStyleSheet.create({
   itemName: {
     marginBottom: 5,
     fontSize: '15rem',
-    fontWeight: '600',
+    fontFamily: font.semiBold,
     color: color.mono.black,
   },
   cardInfoItem: {

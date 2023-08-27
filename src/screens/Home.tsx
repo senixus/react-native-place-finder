@@ -1,5 +1,13 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, View, FlatList, StatusBar, Platform, Alert} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  Image,
+  View,
+  FlatList,
+  StatusBar,
+  Platform,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -36,6 +44,7 @@ import yelp from '@api/index';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 const LOCATION =
   Platform.OS === 'android'
@@ -48,6 +57,7 @@ const Search = () => {
   const [term, setTerm] = useState('coffee');
   const [markerItem, setMarkerItem] = useState<ISearchItem>();
   const [searchItems, setSearchItems] = useState<ISearchItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Refs
   const modalRef = useRef<IModalRef>(null);
@@ -62,10 +72,13 @@ const Search = () => {
 
   const search = async () => {
     try {
+      setIsLoading(true);
       const qs = new URLSearchParams({location, term}).toString();
       const response = await yelp.get(`/businesses/search?${qs}`);
       setSearchItems(response.data.businesses);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -128,27 +141,38 @@ const Search = () => {
         )}
         <Map searchItems={searchItems} setMarkerItem={setMarkerItem} />
       </FullScreenModal>
-      <SafeAreaView edges={['top']} style={{flex: 1}}>
+      <SafeAreaView edges={['top']} style={styles.body}>
         <View style={styles.container}>
-          <View style={styles.filterHeader}>
-            <AppText text={`${location} - ${term}`} style={styles.searchText} />
-            <AppButton
-              onPress={() => modalRef.current?.handleModal()}
-              style={styles.filterBtn}>
-              <Image source={filter} style={styles.filterIcon} />
-            </AppButton>
-          </View>
-          <FlatList
-            data={searchItems}
-            renderItem={renderItem}
-            keyExtractor={item => item?.id}
-            contentContainerStyle={{paddingBottom: 20}}
-          />
-          <AppButton
-            onPress={() => mapModalRef.current?.handleModal()}
-            style={styles.mapBtn}>
-            <AppText text="Show on Map" style={styles.mapText} />
-          </AppButton>
+          {isLoading ? (
+            <View style={styles.loader}>
+              <ActivityIndicator color={color.red.primary} />
+            </View>
+          ) : (
+            <>
+              <View style={styles.filterHeader}>
+                <AppText
+                  text={`${location} - ${term}`}
+                  style={styles.searchText}
+                />
+                <AppButton
+                  onPress={() => modalRef.current?.handleModal()}
+                  style={styles.filterBtn}>
+                  <Image source={filter} style={styles.filterIcon} />
+                </AppButton>
+              </View>
+              <FlatList
+                data={searchItems}
+                renderItem={renderItem}
+                keyExtractor={item => item?.id}
+                contentContainerStyle={{paddingBottom: 20}}
+              />
+              <AppButton
+                onPress={() => mapModalRef.current?.handleModal()}
+                style={styles.mapBtn}>
+                <AppText text="Show on Map" style={styles.mapText} />
+              </AppButton>
+            </>
+          )}
         </View>
       </SafeAreaView>
     </>
@@ -158,6 +182,10 @@ const Search = () => {
 export default Search;
 
 const styles = EStyleSheet.create({
+  body: {
+    flex: 1,
+    backgroundColor: color.mono.white,
+  },
   container: {
     flex: 1,
     backgroundColor: color.mono.white,
@@ -168,7 +196,7 @@ const styles = EStyleSheet.create({
   },
   searchText: {
     marginLeft: 'auto',
-    fontWeight: '700',
+    fontFamily: font.bold,
     letterSpacing: 0.5,
     fontSize: '15rem',
     color: color.mono.black,
@@ -203,11 +231,17 @@ const styles = EStyleSheet.create({
     color: color.mono.white,
     letterSpacing: 0.5,
     fontSize: '13rem',
+    fontFamily: font.regular,
   },
   closeBtn: {
     position: 'absolute',
     top: 10,
     left: 10,
     zIndex: 10,
+  },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });

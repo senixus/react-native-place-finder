@@ -12,6 +12,7 @@ import AppText from '@components/common/AppText';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 interface IProps {
   setMarkerItem?: (value: ISearchItem) => void;
@@ -77,5 +78,6 @@ const styles = EStyleSheet.create({
     color: color.mono.white,
     letterSpacing: 0.5,
     fontSize: '13rem',
+    fontFamily: font.regular,
   },
 });

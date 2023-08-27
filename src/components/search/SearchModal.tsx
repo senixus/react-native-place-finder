@@ -26,6 +26,7 @@ import close from '@assets/close-circle.png';
 
 // Utils
 import {color} from '@utils/color';
+import {font} from '@utils/font';
 
 export interface IModalRef {
   handleModal: () => void;
@@ -136,7 +137,7 @@ const styles = EStyleSheet.create({
   },
   text: {
     color: color.mono.white,
-    fontWeight: 'bold',
+    fontFamily: font.bold,
     textAlign: 'center',
     letterSpacing: 0.8,
     fontSize: '14rem',
@@ -144,7 +145,7 @@ const styles = EStyleSheet.create({
   label: {
     fontSize: '13rem',
     marginBottom: 10,
-    fontWeight: '600',
+    fontFamily: font.semiBold,
   },
 });
 
