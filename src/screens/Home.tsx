@@ -8,10 +8,12 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Geolocation from 'react-native-geolocation-service';
 import {useNavigation} from '@react-navigation/native';
+import {Marker} from 'react-native-maps';
 import {
   PERMISSIONS,
   RESULTS,
@@ -43,6 +45,7 @@ import {IAppParams} from '@interfaces/app.interface';
 import yelp from '@api/index';
 
 // Utils
+import {GOOGLE_API_URL, GOOGLE_MAPS_API_KEY} from '@utils/config';
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 
@@ -53,11 +56,12 @@ const LOCATION =
 
 const Search = () => {
   // States
-  const [location, setLocation] = useState('New York');
+  const [location, setLocation] = useState('');
   const [term, setTerm] = useState('coffee');
   const [markerItem, setMarkerItem] = useState<ISearchItem>();
   const [searchItems, setSearchItems] = useState<ISearchItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [latLng, setLatLng] = useState({lat: 0, lng: 0});
 
   // Refs
   const modalRef = useRef<IModalRef>(null);
@@ -67,8 +71,10 @@ const Search = () => {
   const navigation = useNavigation<StackNavigationProp<IAppParams, 'Search'>>();
 
   useEffect(() => {
-    search();
-  }, []);
+    if (location !== '') {
+      search();
+    }
+  }, [location]);
 
   const search = async () => {
     try {
@@ -86,27 +92,56 @@ const Search = () => {
   const renderItem = ({item}: {item: ISearchItem}) => (
     <SearchCard
       searchItem={item}
-      onDetail={() => navigation.navigate('Detail', {id: item?.id})}
+      onDetail={() => navigation.navigate('Detail', {id: item?.id, latLng})}
     />
   );
 
   const handleRedirect = () => {
-    navigation.navigate('Detail', {id: markerItem?.id as string});
+    navigation.navigate('Detail', {id: markerItem?.id as string, latLng});
     mapModalRef.current?.handleModal();
+  };
+
+  const getCityFromLatLng = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `${GOOGLE_API_URL}/geocode/json?address=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}`,
+      );
+      const data = await response.json();
+      const city =
+        data.results[0]?.address_components[3]?.long_name || 'Las vegas';
+      setLocation(city);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(
+      ({coords}) => {
+        getCityFromLatLng(coords.latitude, coords.longitude);
+        setLatLng({lat: coords.latitude, lng: coords.longitude});
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+    );
   };
 
   const checkPermission = async () => {
     const result = await check(LOCATION);
+
     if (result === RESULTS.DENIED) {
       const response = await request(LOCATION);
       if (response === RESULTS.GRANTED || response === RESULTS.LIMITED) {
-        console.log(response);
+        getLocation();
       }
     } else if (result !== RESULTS.GRANTED && result !== RESULTS.LIMITED) {
       Alert.alert('Location Permission', 'App need location permission', [
         {text: 'Cancel', style: 'cancel'},
         {text: 'Open Settings', onPress: () => openSettings()},
       ]);
+    } else {
+      getLocation();
     }
   };
 
@@ -139,7 +174,26 @@ const Search = () => {
         ) : (
           <></>
         )}
-        <Map searchItems={searchItems} setMarkerItem={setMarkerItem} />
+        <Map
+          latLng={{
+            lat: searchItems[0]?.coordinates?.latitude,
+            lng: searchItems[0]?.coordinates?.longitude,
+          }}>
+          {searchItems?.length > 0 &&
+            searchItems?.map(item => (
+              <Marker
+                onPress={() => setMarkerItem(item)}
+                key={item.id}
+                coordinate={{
+                  latitude: item.coordinates.latitude,
+                  longitude: item.coordinates.longitude,
+                }}>
+                <View style={styles.btn}>
+                  <AppText text={item.name} style={styles.name} />
+                </View>
+              </Marker>
+            ))}
+        </Map>
       </FullScreenModal>
       <SafeAreaView edges={['top']} style={styles.body}>
         <View style={styles.container}>
