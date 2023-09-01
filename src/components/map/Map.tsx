@@ -1,60 +1,34 @@
-import React, {FC, useEffect} from 'react';
-import {View} from 'react-native';
+import React, {FC} from 'react';
 import ClusterMapView from 'react-native-map-clustering';
-import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {PROVIDER_GOOGLE} from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
-
-// Interfaces
-import {ISearchItem} from '@interfaces/search.interface';
-
-// Components
-import AppText from '@components/common/AppText';
 
 // Utils
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 
 interface IProps {
-  setMarkerItem?: (value: ISearchItem) => void;
-  searchItems: ISearchItem[];
+  latLng: {lat: number; lng: number};
+  children: React.ReactNode;
 }
 
-const Map: FC<IProps> = ({setMarkerItem, searchItems}) => {
-  useEffect(() => {
-    return () => setMarkerItem?.({} as ISearchItem);
-  }, []);
-
+const Map: FC<IProps> = ({latLng, children}) => {
   return (
-    <>
-      <ClusterMapView
-        animationEnabled={false}
-        toolbarEnabled={false}
-        clusterColor={color.red.primary}
-        clusteringEnabled={true}
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        initialRegion={{
-          latitude: searchItems[0]?.coordinates?.latitude,
-          longitude: searchItems[0]?.coordinates?.longitude,
-          latitudeDelta: 8.5,
-          longitudeDelta: 8.5,
-        }}>
-        {searchItems?.length > 0 &&
-          searchItems?.map(item => (
-            <Marker
-              onPress={() => setMarkerItem && setMarkerItem(item)}
-              key={item.id}
-              coordinate={{
-                latitude: item.coordinates.latitude,
-                longitude: item.coordinates.longitude,
-              }}>
-              <View style={styles.btn}>
-                <AppText text={item.name} style={styles.name} />
-              </View>
-            </Marker>
-          ))}
-      </ClusterMapView>
-    </>
+    <ClusterMapView
+      animationEnabled={false}
+      toolbarEnabled={false}
+      clusterColor={color.red.primary}
+      clusteringEnabled={true}
+      provider={PROVIDER_GOOGLE}
+      style={styles.map}
+      initialRegion={{
+        latitude: latLng.lat,
+        longitude: latLng.lng,
+        latitudeDelta: 8.5,
+        longitudeDelta: 8.5,
+      }}>
+      {children}
+    </ClusterMapView>
   );
 };
 
