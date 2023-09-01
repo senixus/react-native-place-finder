@@ -15,7 +15,11 @@ const AppButton: FC<IProps> = ({
   isDisabled = false,
 }) => {
   return (
-    <TouchableOpacity disabled={isDisabled} onPress={onPress} style={style}>
+    <TouchableOpacity
+      testID="button"
+      disabled={isDisabled}
+      onPress={onPress}
+      style={style}>
       {children}
     </TouchableOpacity>
   );
