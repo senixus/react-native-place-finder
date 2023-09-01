@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {Polyline, Marker} from 'react-native-maps';
 
 // Components
 import FullScreenImage, {IModalRef} from '@components/detail/Modal';
@@ -17,6 +18,10 @@ import ReviewCard from '@components/review/ReviewCard';
 import DetailCard from '@components/detail/DetailCard';
 import AppButton from '@components/common/AppButton';
 import AppText from '@components/common/AppText';
+import FullScreenModal, {
+  IModalRef as IFullScreenRef,
+} from '@components/detail/Modal';
+import Map from '@components/map/Map';
 
 // Interfaces
 import {IBusinessDetail} from '@interfaces/detail.interface';
@@ -32,6 +37,8 @@ import back from '@assets/left-arrow.png';
 import yelp from '@api/index';
 
 // Utils
+import {GOOGLE_API_URL, GOOGLE_MAPS_API_KEY} from '@utils/config';
+import {decodeCoordinates} from '@utils/coordinatesDecoder';
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 
@@ -48,12 +55,38 @@ const Detail: FC<IProps> = ({navigation, route}) => {
   );
   const [review, setReview] = useState<IReview>({reviews: [], total: 0});
   const [isLoading, setIsLoading] = useState(false);
+  const [routeCoordinates, setRouteCoordinates] = useState<
+    {latitude: number; longitude: number}[]
+  >([]);
 
   // Route Params
-  const {id} = route.params;
+  const {id, latLng} = route.params;
 
   // Refs
   const modalRef = useRef<IModalRef>(null);
+  const mapModalRef = useRef<IFullScreenRef>(null);
+
+  const getDirections = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `${GOOGLE_API_URL}/directions/json?origin=${latLng.lat},${latLng.lng}&destination=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}`,
+      );
+      const data = await response.json();
+      const routes = data.routes;
+
+      if (routes.length > 0) {
+        const coordinates = routes[0].overview_polyline.points;
+        const decodedCoordinateList = decodeCoordinates(coordinates);
+        const route = decodedCoordinateList.map(coord => ({
+          latitude: coord[0],
+          longitude: coord[1],
+        }));
+        setRouteCoordinates(route);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getBusinessDetail = async () => {
     try {
@@ -65,6 +98,10 @@ const Detail: FC<IProps> = ({navigation, route}) => {
 
       setBusinessDetail(detailResponse.data);
       setReview(reviewResponse.data);
+      getDirections(
+        detailResponse.data.coordinates.latitude,
+        detailResponse.data.coordinates.longitude,
+      );
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -74,7 +111,7 @@ const Detail: FC<IProps> = ({navigation, route}) => {
 
   useEffect(() => {
     getBusinessDetail();
-  }, []);
+  }, [id, latLng]);
 
   const handleModal = (img: string) => {
     setImage(img);
@@ -91,6 +128,31 @@ const Detail: FC<IProps> = ({navigation, route}) => {
           <Image source={close} />
         </AppButton>
       </FullScreenImage>
+      <FullScreenModal ref={mapModalRef}>
+        <AppButton
+          onPress={() => mapModalRef?.current?.handleModal()}
+          style={styles.closeBtn}>
+          <Image source={close} />
+        </AppButton>
+        <Map latLng={{lat: latLng.lat, lng: latLng.lng}}>
+          <Marker coordinate={{latitude: latLng.lat, longitude: latLng.lng}} />
+          {businessDetail.coordinates && (
+            <Marker
+              coordinate={{
+                latitude: businessDetail.coordinates.latitude,
+                longitude: businessDetail.coordinates.longitude,
+              }}
+            />
+          )}
+          {routeCoordinates.length > 0 && (
+            <Polyline
+              coordinates={routeCoordinates}
+              strokeColor={color.red.primary}
+              strokeWidth={4}
+            />
+          )}
+        </Map>
+      </FullScreenModal>
       <SafeAreaView style={styles.body}>
         {isLoading ? (
           <View style={styles.container}>
@@ -141,6 +203,11 @@ const Detail: FC<IProps> = ({navigation, route}) => {
             </View>
           </ScrollView>
         )}
+        <AppButton
+          onPress={() => mapModalRef.current?.handleModal()}
+          style={styles.mapBtn}>
+          <AppText text="Show on Map" style={styles.mapText} />
+        </AppButton>
       </SafeAreaView>
     </>
   );
@@ -176,6 +243,7 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
+    zIndex: 10,
   },
   reviewTitle: {
     fontSize: '17rem',
@@ -201,5 +269,24 @@ const styles = EStyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  mapBtn: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    backgroundColor: color.red.primary,
+    borderWidth: 1,
+    borderColor: color.red.primary,
+    borderRadius: 100,
+    height: '35rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  mapText: {
+    color: color.mono.white,
+    letterSpacing: 0.5,
+    fontSize: '13rem',
+    fontFamily: font.regular,
   },
 });
