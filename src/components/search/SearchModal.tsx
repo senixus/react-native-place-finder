@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {useDispatch} from 'react-redux';
 
 // Components
 import AppButton from '@components/common/AppButton';
@@ -45,8 +44,6 @@ const SearchModal: ForwardRefRenderFunction<IModalRef, IProps> = (
   ref,
 ) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  const dispatch = useDispatch();
 
   const handleModal = () => setModalVisible(prevVisible => !prevVisible);
 
