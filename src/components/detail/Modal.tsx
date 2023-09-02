@@ -30,6 +30,7 @@ const FullScreenModal: ForwardRefRenderFunction<IModalRef, IProps> = (
 
   return (
     <Modal
+      testID="modal-test"
       animationType="slide"
       transparent={true}
       visible={modalVisible}
@@ -38,7 +39,9 @@ const FullScreenModal: ForwardRefRenderFunction<IModalRef, IProps> = (
         <SafeAreaView
           edges={['top']}
           style={{flex: 1, backgroundColor: 'transparent'}}>
-          <View style={styles.centeredView}>{children}</View>
+          <View testID="modal-content" style={styles.centeredView}>
+            {children}
+          </View>
         </SafeAreaView>
       </SafeAreaProvider>
     </Modal>

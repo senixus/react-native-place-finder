@@ -18,12 +18,11 @@ import {color} from '@utils/color';
 import {font} from '@utils/font';
 
 interface IProps {
-  totalReview: number;
   handleModal: (value: string) => void;
   businessDetail: IBusinessDetail;
 }
 
-const DetailCard: FC<IProps> = ({totalReview, handleModal, businessDetail}) => {
+const DetailCard: FC<IProps> = ({handleModal, businessDetail}) => {
   return (
     <View style={styles.innerContainer}>
       <View style={styles.infoContainer}>
