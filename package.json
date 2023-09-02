@@ -55,6 +55,7 @@
     "@react-native/metro-config": "^0.72.11",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.2.2",
+    "@testing-library/user-event": "^14.4.3",
     "@tsconfig/react-native": "^3.0.0",
     "@types/jest": "^29.5.4",
     "@types/react": "^18.0.24",
