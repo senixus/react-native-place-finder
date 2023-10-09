@@ -54,7 +54,6 @@ const DetailCard: FC<IProps> = ({handleModal, businessDetail}) => {
                 </View>
               ))}
           </View>
-
           <AppText
             text={businessDetail?.location?.display_address
               ?.join(',')

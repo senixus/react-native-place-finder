@@ -1,6 +1,5 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useEffect, useRef, useState} from 'react';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {
   View,
   Image,
@@ -39,15 +38,11 @@ import yelp from '@api/index';
 // Utils
 import {GOOGLE_API_URL, GOOGLE_MAPS_API_KEY} from '@utils/config';
 import {decodeCoordinates} from '@utils/coordinatesDecoder';
+import {navigationRef} from 'RootNavigation';
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 
-interface IProps {
-  navigation: StackNavigationProp<IAppParams, 'Detail'>;
-  route: RouteProp<IAppParams, 'Detail'>;
-}
-
-const Detail: FC<IProps> = ({navigation, route}) => {
+const Detail = () => {
   // States
   const [image, setImage] = useState('');
   const [businessDetail, setBusinessDetail] = useState<IBusinessDetail>(
@@ -58,6 +53,8 @@ const Detail: FC<IProps> = ({navigation, route}) => {
   const [routeCoordinates, setRouteCoordinates] = useState<
     {latitude: number; longitude: number}[]
   >([]);
+
+  const route = useRoute<RouteProp<IAppParams, 'Detail'>>();
 
   // Route Params
   const {id, latLng} = route.params;
@@ -174,13 +171,12 @@ const Detail: FC<IProps> = ({navigation, route}) => {
                 resizeMode="cover"
               />
               <AppButton
-                onPress={() => navigation.goBack()}
+                onPress={() => navigationRef.current?.goBack()}
                 style={styles.backBtn}>
                 <Image source={back} />
               </AppButton>
               <DetailCard
                 handleModal={(photo: string) => handleModal(photo)}
-                totalReview={review?.total}
                 businessDetail={businessDetail}
               />
 

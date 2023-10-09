@@ -8,11 +8,9 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Geolocation from 'react-native-geolocation-service';
-import {useNavigation} from '@react-navigation/native';
 import {Marker} from 'react-native-maps';
 import {
   PERMISSIONS,
@@ -39,13 +37,13 @@ import filter from '@assets/edit.png';
 
 // Interface
 import {ISearchItem} from '@interfaces/search.interface';
-import {IAppParams} from '@interfaces/app.interface';
 
 // API
 import yelp from '@api/index';
 
 // Utils
 import {GOOGLE_API_URL, GOOGLE_MAPS_API_KEY} from '@utils/config';
+import {navigationRef} from '../RootNavigation';
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 
@@ -66,9 +64,6 @@ const Search = () => {
   // Refs
   const modalRef = useRef<IModalRef>(null);
   const mapModalRef = useRef<IFullScreenRef>(null);
-
-  // Hooks
-  const navigation = useNavigation<StackNavigationProp<IAppParams, 'Search'>>();
 
   useEffect(() => {
     if (location !== '') {
@@ -92,12 +87,17 @@ const Search = () => {
   const renderItem = ({item}: {item: ISearchItem}) => (
     <SearchCard
       searchItem={item}
-      onDetail={() => navigation.navigate('Detail', {id: item?.id, latLng})}
+      onDetail={() =>
+        navigationRef.current?.navigate('Detail', {id: item?.id, latLng})
+      }
     />
   );
 
   const handleRedirect = () => {
-    navigation.navigate('Detail', {id: markerItem?.id as string, latLng});
+    navigationRef.current?.navigate('Detail', {
+      id: markerItem?.id as string,
+      latLng,
+    });
     mapModalRef.current?.handleModal();
   };
 
