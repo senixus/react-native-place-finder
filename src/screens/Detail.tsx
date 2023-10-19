@@ -38,7 +38,7 @@ import yelp from '@api/index';
 // Utils
 import {GOOGLE_API_URL, GOOGLE_MAPS_API_KEY} from '@utils/config';
 import {decodeCoordinates} from '@utils/coordinatesDecoder';
-import {navigationRef} from 'RootNavigation';
+import {navigationRef} from '../RootNavigation';
 import {color} from '@utils/color';
 import {font} from '@utils/font';
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {navigationRef} from './src/RootNavigation';
 
 // Screens
 import Detail from '@screens/Detail';
@@ -11,7 +12,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <SafeAreaProvider>
         <Stack.Navigator>
           <Stack.Screen
